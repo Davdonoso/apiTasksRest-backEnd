@@ -1,0 +1,76 @@
+@host = http://localhost:3000
+
+GET {{host}}/api/employees
+
+###
+GET {{host}}/api/tasks
+
+###
+
+GET {{host}}/api/employees/2
+
+###
+GET {{host}}/api/tasks/3
+
+###
+
+GET {{host}}/api/employees/tasks
+###
+GET {{host}}/api/tasks/employee/1
+
+###
+
+POST {{host}}/api/employees
+Content-Type: application/json
+
+{
+  "name": "Nataschi t",
+  "email": "taschi@gmail.com",
+  "username": "Nati393",
+  "password": "120000",
+  "position": "encargada"
+}
+
+###
+POST {{host}}/api/tasks
+Content-Type: application/json
+
+{
+  "title": "Limpiar Mesas",
+  "description": "Limpiar mesas todos los dias",
+  "status": "todo",
+  "due_date": "2025-10-20",
+  "employee_id":1
+}
+
+###
+
+PUT {{host}}/api/employees/1
+Content-Type: application/json
+
+{
+  "name": "dave meta",
+  "email": "dave@gmail.com",
+  "username": "daveme",
+  "password": "123456",
+  "position": "camarero"
+}
+
+###
+PUT {{host}}/api/tasks/1
+Content-Type: application/json
+
+{
+  "title": "los truenos",
+  "description": "Los truenos mas peligrosos",
+  "status": "ciencia",
+  "due_date": "2025-10-20",
+  "employee_id":1
+}
+
+###
+DELETE {{host}}/api/employees/2
+
+###
+
+DELETE {{host}}/api/tasks/2
