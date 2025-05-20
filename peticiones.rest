@@ -24,11 +24,11 @@ POST {{host}}/api/employees
 Content-Type: application/json
 
 {
-  "name": "Nataschi t",
-  "email": "taschi@gmail.com",
-  "username": "Nati393",
-  "password": "120000",
-  "position": "encargada"
+  "name": "Manuel Perez",
+  "email": "m.perez@gmail.com",
+  "username": "ManuelP23",
+  "password": "234874",
+  "position": "camarero"
 }
 
 ###
@@ -36,11 +36,11 @@ POST {{host}}/api/tasks
 Content-Type: application/json
 
 {
-  "title": "Limpiar Mesas",
-  "description": "Limpiar mesas todos los dias",
+  "title": "Barrer Suelo",
+  "description": "Limpiar suelo todos los dias",
   "status": "todo",
   "due_date": "2025-10-20",
-  "employee_id":1
+  "employee_id":3
 }
 
 ###
