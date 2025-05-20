@@ -7,6 +7,8 @@ const dayjs = require("dayjs");
 const app = express();
 app.use(express.json());
 app.use(cors());
+const tasksRoutes = require("./routes/api/tasks.routes");
+app.use('/api/tasks', tasksRoutes);
 
 // Middleware
 

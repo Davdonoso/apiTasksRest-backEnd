@@ -37,10 +37,10 @@ Content-Type: application/json
 
 {
   "title": "Barrer Suelo",
-  "description": "Limpiar suelo todos los dias",
+  "description": "Limpiar suelo los martes",
   "status": "todo",
-  "due_date": "2025-10-20",
-  "employee_id":3
+  "due_date": "2025-10-18",
+  "employee_id":2
 }
 
 ###
@@ -74,3 +74,13 @@ DELETE {{host}}/api/employees/2
 ###
 
 DELETE {{host}}/api/tasks/2
+
+
+### envio pdf
+GET {{host}}/api/tasks/export/pdf
+
+### envio email
+POST {{host}}api/tasks/send/pdf
+Content-Type: application/json
+
+{ "email": "waltra@gmail.com" }

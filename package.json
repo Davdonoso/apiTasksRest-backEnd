@@ -21,7 +21,11 @@
     "dayjs": "^1.11.13",
     "dotenv": "^16.3.1",
     "express": "^5.0.0",
-    "mysql2": "^3.14.1"
+    "fs": "^0.0.1-security",
+    "mysql2": "^3.14.1",
+    "nodemailer": "^7.0.3",
+    "path": "^0.12.7",
+    "pdfkit": "^0.17.1"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",

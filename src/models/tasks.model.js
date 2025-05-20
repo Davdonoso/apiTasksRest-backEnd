@@ -49,6 +49,15 @@ const remove = async (taskId) => {
   return result;
 };
 
+// Recoge todas las tareas sin paginacion y sin filtrar para generar el PDF
+// y enviarlas por email
+
+const selectAllTasksRaw = async () => {
+  const [result] = await db.query("SELECT * FROM tasks");
+  return result;
+};
+
+
 module.exports = {
   selectByEmployeeId,
   selectByTaskId,
@@ -57,4 +66,5 @@ module.exports = {
   insert,
   update,
   remove,
+  selectAllTasksRaw
 };

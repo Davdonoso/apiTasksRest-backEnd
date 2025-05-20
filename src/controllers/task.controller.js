@@ -1,6 +1,9 @@
 const Task = require("../models/tasks.model");
 const Employee = require("../models/employees.model");
-
+const { generateTasksPDF } = require('../helper/pdf.helper');
+const { sendTasksEmail } = require('../helper/email.helper');
+const path = require('path');
+const fs = require('node:fs');
 
 const getTasksById = async (req, res) => {
   const { taskId } = req.params;
@@ -87,6 +90,56 @@ const removeTask = async (req, res) => {
   res.json({ message: "Tarea eliminada ", data: tasks });
 };
 
+// tareas para el pdf
+const getAllTasksRaw = async () => {
+  return await Task.selectAllTasksRaw();
+};
+
+const exportTasksPDF = async (req, res) => {
+  console.log('Entrando a exportTasksPDF');
+  try {
+    const tasks = await Task.selectAllTasksRaw();
+    const pdfDir = path.join(__dirname, 'pdfs');
+    const filePath = path.join(pdfDir, 'tasks.pdf');
+    if (!fs.existsSync(pdfDir)) {
+      fs.mkdirSync(pdfDir);
+    }
+    // Generar el PDF
+    console.log('Generando PDF en:', filePath);
+    await generateTasksPDF(tasks, filePath);
+    console.log('PDF generado');
+    res.download(filePath, 'tasks.pdf', (err) => {
+      if (err) {
+        console.error('Error al enviar el PDF:', err);
+      }
+      fs.unlink(filePath, (err) => {
+        if (err) console.error('Error al borrar el PDF:', err);
+      });
+    });
+  } catch (err) {
+    console.error('Error al generar el PDF:', err);
+    res.status(500).json({ error: 'Error al generar el PDF', details: err.message });
+  }
+};
+
+const sendTaskPDF = async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ error: 'Email requerido' });
+
+  try {
+    const tasks = await Task.getAllTasksRaw();
+    const filePath = path.join(__dirname, 'tasks.pdf');
+    await generateTasksPDF(tasks, filePath);
+    await sendTasksEmail(email, 'Lista de Tareas', 'Adjunto encontrarás el PDF con las tareas.', filePath);
+    fs.unlinkSync(filePath);
+    res.json({ message: 'Email enviado correctamente' });
+  } catch (err) {
+    res.status(500).json({ error: 'Error al enviar el email' });
+  }
+};
+
+
+
 module.exports = {
   getTasksById,
   getAllTasks,
@@ -94,5 +147,6 @@ module.exports = {
   updateTask,
   removeTask,
   getTasksAndEmployee,
-  getTasksAndEmployeeById
+  getTasksAndEmployeeById,
+  getAllTasksRaw,exportTasksPDF,sendTaskPDF
 };
