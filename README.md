@@ -1,37 +1,4 @@
-# Express Base Application for API Creation
-
-This is a basic Express application template designed to help you create APIs
-quickly. It includes essential configurations and setup for starting an Express
-server.
-
-## Features
-
-- Basic Express server setup
-- CORS enabled
-- Environment configuration with `.env` support
-
-## Getting Started
-
-### Prerequisites
-
-Ensure you have Node.js and npm installed on your machine. You can download them
-from [Node.js official website](https://nodejs.org/).
-
-### Installation
-
-1. **Clone the repository:**
-
-```bash
-git clone https://github.com/mariogiron/express-init-template.git project-name
-```
-
-2. **Navigate to the project directory:**
-
-```bash
-cd project-name
-```
-
-3. **Install the dependencies:**
+**Install the dependencies:**
 
 ```bash
 npm install
@@ -77,23 +44,3 @@ npm run dev
   project. The actions available are "model", "controller", "route", "all"
 - **config**: Runs `express config` to config the date of your project.
 
-### Project Structure
-
-    ├── src
-    │   ├── app.js          # Express app configuration
-    │   ├── models          # Data models
-    │   ├── controllers     # Route controllers
-    │   ├── routes          # Application routes
-    ├── .env                # Environment variables
-    ├── index.js            # Server creation and configuration
-    ├── package.json        # Project metadata and dependencies
-
-### Contributing
-
-Feel free to submit issues and pull requests to improve the project. For major
-changes, please open an issue first to discuss what you would like to change.
-
-### License
-
-This project is licensed under the ISC License - see the LICENSE file for
-details.
