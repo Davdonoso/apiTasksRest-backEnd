@@ -6,7 +6,10 @@ async function sendTasksEmail(to, subject, text, attachmentPath) {
     service: 'gmail', // O el servicio que uses
     auth: {
       user: 'waltra2@gmail.com',
-      pass: 'Pirata2'
+      pass: 'fafs oorf tncb hgeu'
+    },
+    tls: {
+      rejectUnauthorized: false
     }
   });
 

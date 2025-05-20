@@ -80,7 +80,7 @@ DELETE {{host}}/api/tasks/2
 GET {{host}}/api/tasks/export/pdf
 
 ### envio email
-POST {{host}}api/tasks/send/pdf
+POST {{host}}/api/tasks/send/pdf
 Content-Type: application/json
 
 { "email": "waltra@gmail.com" }

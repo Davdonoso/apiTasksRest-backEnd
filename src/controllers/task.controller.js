@@ -123,17 +123,23 @@ const exportTasksPDF = async (req, res) => {
 };
 
 const sendTaskPDF = async (req, res) => {
+  console.log('Enviando PDF por email');
   const { email } = req.body;
   if (!email) return res.status(400).json({ error: 'Email requerido' });
 
   try {
-    const tasks = await Task.getAllTasksRaw();
+    const tasks = await Task.selectAllTasksRaw();
+    console.log('Tareas obtenidas:', tasks.length);
     const filePath = path.join(__dirname, 'tasks.pdf');
+    console.log('PDF generado en:', filePath);
     await generateTasksPDF(tasks, filePath);
     await sendTasksEmail(email, 'Lista de Tareas', 'Adjunto encontrarás el PDF con las tareas.', filePath);
+    console.log('Email enviado a:', email);
+
     fs.unlinkSync(filePath);
     res.json({ message: 'Email enviado correctamente' });
   } catch (err) {
+    console.error('Error al enviar el email:', err);
     res.status(500).json({ error: 'Error al enviar el email' });
   }
 };
