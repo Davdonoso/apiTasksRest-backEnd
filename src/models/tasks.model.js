@@ -57,6 +57,17 @@ const selectAllTasksRaw = async () => {
   return result;
 };
 
+const selectAllTasksAndEmployeeRaw = async (employeeId) => {
+  const [result] = await db.query(
+    `SELECT tasks.id, tasks.title, tasks.description, tasks.due_date, employees.name as employee_name
+     FROM tasks
+     INNER JOIN employees ON tasks.employee_id = employees.id
+     WHERE tasks.employee_id = ?`,
+    [employeeId]
+  );
+  return result;
+};
+
 
 module.exports = {
   selectByEmployeeId,
@@ -66,5 +77,6 @@ module.exports = {
   insert,
   update,
   remove,
-  selectAllTasksRaw
+  selectAllTasksRaw,
+  selectAllTasksAndEmployeeRaw,
 };

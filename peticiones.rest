@@ -76,11 +76,22 @@ DELETE {{host}}/api/employees/2
 DELETE {{host}}/api/tasks/2
 
 
-### envio pdf
+### envio pdf con todas las tareas
 GET {{host}}/api/tasks/export/pdf
 
-### envio email
+### envio email con todas las tareas
 POST {{host}}/api/tasks/send/pdf
+Content-Type: application/json
+
+{ "email": "waltra@gmail.com" }
+
+### envio pdf con las tareas de un empleado
+GET {{host}}/api/tasks/employee/1/tasks/export/pdf
+
+
+
+### envio email con las tareas de un empleado
+POST {{host}}/api/tasks/employee/1/tasks/send/pdf
 Content-Type: application/json
 
 { "email": "waltra@gmail.com" }

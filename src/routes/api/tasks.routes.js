@@ -11,7 +11,10 @@ const {
   getTasksAndEmployeeById,
   exportTasksPDF,
   sendTaskPDF,
+  sendAllTaskEmployeePDF,  
+  exportTasksEmployeePDF
 } = require("../../controllers/task.controller");
+
 
 const { checktaskId, checkdataTask } = require("../../middleware/tasks.middleware");
 
@@ -19,12 +22,14 @@ const { checktaskId, checkdataTask } = require("../../middleware/tasks.middlewar
 router.get("/", getAllTasks);
 router.get("/task", getTasksAndEmployee);
 router.get("/export/pdf", exportTasksPDF);
+router.get("/employee/:employeeId/tasks/export/pdf", exportTasksEmployeePDF);
 
 router.get("/task/:taskId", getTasksAndEmployee);
 router.get("/employee/:employeeId", getTasksAndEmployeeById);
 router.get("/:taskId",checktaskId,getTasksById);
 router.post("/",checkdataTask, createTask);
 router.post('/send/pdf', sendTaskPDF);
+router.post('/employee/:employeeId/tasks/send/pdf', sendAllTaskEmployeePDF);
 router.put("/:taskId", checktaskId,checkdataTask,updateTask);
 router.delete("/:taskId",checktaskId, removeTask);
 

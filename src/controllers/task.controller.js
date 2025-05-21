@@ -121,7 +121,78 @@ const exportTasksPDF = async (req, res) => {
     res.status(500).json({ error: 'Error al generar el PDF', details: err.message });
   }
 };
+// Generacion de pdf de tareas por empleado
 
+const getAllTasksEmployeeRaw = async (employeeId) => {
+  return await Task.selectAllTasksAndEmployeeRaw(employeeId);
+};
+/*const exportTasksEmployeePDF = async (req, res) => {
+  console.log('Entrando a exportTasksEmployeePDF');
+  const { employeeId } = req.params;
+  try {
+    const tasks = await Task.selectAllTasksAndEmployeeRaw (employeeId);
+    const pdfDir = path.join(__dirname, 'pdfs');
+    const filePath = path.join(pdfDir, 'tasks.pdf');
+    if (!fs.existsSync(pdfDir)) {
+      fs.mkdirSync(pdfDir);
+    }
+    // Generar el PDF
+    console.log('Generando PDF en:', filePath);
+    await generateTasksPDF(tasks, filePath);
+    console.log('PDF generado');
+    res.download(filePath, 'tasks.pdf', (err) => {
+      if (err) {
+        console.error('Error al enviar el PDF:', err);
+      }
+      fs.unlink(filePath, (err) => {
+        if (err) console.error('Error al borrar el PDF:', err);
+      });
+    });
+  } catch (err) {
+    console.error('Error al generar el PDF:', err);
+    res.status(500).json({ error: 'Error al generar el PDF', details: err.message });
+  }
+};*/
+const exportTasksEmployeePDF = async (req, res) => {
+  console.log('Entrando a exportTasksEmployeePDF');
+  const { employeeId } = req.params;
+
+  try {
+    const tasks = await Task.selectAllTasksAndEmployeeRaw(employeeId);
+
+    if (!tasks || tasks.length === 0) {
+      return res.status(404).json({ error: 'No se encontraron tareas para este empleado' });
+    }
+
+    const pdfDir = path.join(__dirname, 'pdfs');
+    const filePath = path.join(pdfDir, `tasks_emp_${employeeId}.pdf`);
+
+    if (!fs.existsSync(pdfDir)) {
+      fs.mkdirSync(pdfDir, { recursive: true });
+    }
+
+    console.log('Generando PDF en:', filePath);
+    await generateTasksPDF(tasks, filePath);
+    console.log('PDF generado');
+
+    res.download(filePath, `employee_${employeeId}_tasks.pdf`, (err) => {
+      if (err) {
+        console.error('Error al enviar el PDF:', err);
+        return res.status(500).json({ error: 'Error al enviar el archivo PDF' });
+      }
+      // Eliminar el archivo temporal luego de enviarlo
+      fs.unlink(filePath, (err) => {
+        if (err) console.error('Error al borrar el archivo PDF:', err);
+      });
+    });
+  } catch (err) {
+    console.error('Error al generar el PDF:', err);
+    res.status(500).json({ error: 'Error al generar el PDF', details: err.message });
+  }
+};
+
+
+// Envio de todas las tareas por email
 const sendTaskPDF = async (req, res) => {
   console.log('Enviando PDF por email');
   const { email } = req.body;
@@ -143,6 +214,42 @@ const sendTaskPDF = async (req, res) => {
     res.status(500).json({ error: 'Error al enviar el email' });
   }
 };
+// Envio tareas por email de un empleado
+
+const sendAllTaskEmployeePDF = async (req, res) => {
+  console.log('Enviando PDF por email');
+  const { email } = req.body;
+  const  employeeId  =Number(req.params.employeeId);
+
+  try {
+    const tasks = await Task.selectAllTasksAndEmployeeRaw(employeeId);
+
+    if (!tasks || tasks.length === 0) {
+      return res.status(404).json({ error: 'No se encontraron tareas para este empleado' });
+    }
+
+    const filePath = path.join(__dirname, `tasks_emp_${employeeId}.pdf`);
+    console.log('Generando PDF en:', filePath);
+
+    await generateTasksPDF(tasks, filePath);
+
+    await sendTasksEmail(
+      email,
+      'Lista de Tareas',
+      'Adjunto encontrarás el PDF con las tareas.',
+      filePath
+    );
+
+    console.log('Email enviado a:', email);
+
+    fs.unlinkSync(filePath);
+
+    res.json({ message: 'Email enviado correctamente' });
+  } catch (err) {
+    console.error('Error al enviar el email:', err);
+    res.status(500).json({ error: 'Error al enviar el email', details: err.message });
+  }
+};
 
 
 
@@ -154,5 +261,7 @@ module.exports = {
   removeTask,
   getTasksAndEmployee,
   getTasksAndEmployeeById,
-  getAllTasksRaw,exportTasksPDF,sendTaskPDF
+  getAllTasksRaw,exportTasksPDF,sendTaskPDF,sendAllTaskEmployeePDF,
+  getAllTasksEmployeeRaw,exportTasksEmployeePDF
+  
 };
